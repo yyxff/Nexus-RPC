@@ -5,13 +5,17 @@ plugins {
 group = 'io.github.yyxff'
 version = '1.0-SNAPSHOT'
 
-repositories {
-    mavenCentral()
-}
+subprojects {
+    apply plugin: 'java-library'
 
-dependencies {
-    testImplementation platform('org.junit:junit-bom:5.10.0')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        implementation "com.alibaba.nacos:nacos-client:2.1.0"
+        implementation "io.netty:netty-all:4.1.73.Final"
+    }
 }
 
 test {
