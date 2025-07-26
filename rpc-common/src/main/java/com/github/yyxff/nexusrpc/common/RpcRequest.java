@@ -1,13 +1,25 @@
 package com.github.yyxff.nexusrpc.common;
 
 public class RpcRequest {
-    private long requestID;
+    private String requestID;
     private String interfaceName;
     private String methodName;
     private Object[] params;
     private Class<?>[] paramsType;
 
-    public long getRequestID() {
+    public RpcRequest(String requestID,
+                      String interfaceName,
+                      String methodName,
+                      Object[] params,
+                      Class<?>[] paramsType) {
+        this.requestID = requestID;
+        this.interfaceName = interfaceName;
+        this.methodName = methodName;
+        this.params = params;
+        this.paramsType = paramsType;
+    }
+
+    public String getRequestID() {
         return requestID;
     }
 

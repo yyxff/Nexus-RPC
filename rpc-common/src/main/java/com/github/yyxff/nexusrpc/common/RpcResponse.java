@@ -1,11 +1,11 @@
 package com.github.yyxff.nexusrpc.common;
 
 public class RpcResponse {
-    private long responseID;
+    private String responseID;
     private Object result;
     private Class<?> resultType;
 
-    public long getResponseID() {
+    public String getResponseID() {
         return responseID;
     }
 

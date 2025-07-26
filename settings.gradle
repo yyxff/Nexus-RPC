@@ -2,4 +2,6 @@ rootProject.name = 'nexus-rpc'
 include("rpc-common", "rpc-core")
 include 'rpc-core'
 include 'rpc-common'
+include 'rpc-client'
+include 'rpc-server'
 
