@@ -4,4 +4,5 @@ include 'rpc-core'
 include 'rpc-common'
 include 'rpc-client'
 include 'rpc-server'
+include 'rpc-registry'
 

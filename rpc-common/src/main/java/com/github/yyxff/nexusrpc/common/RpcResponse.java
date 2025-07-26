@@ -5,6 +5,14 @@ public class RpcResponse {
     private Object result;
     private Class<?> resultType;
 
+    public RpcResponse(String responseID,
+                       Object result,
+                       Class<?> resultType) {
+        this.responseID = responseID;
+        this.result = result;
+        this.resultType = resultType;
+    }
+
     public String getResponseID() {
         return responseID;
     }
