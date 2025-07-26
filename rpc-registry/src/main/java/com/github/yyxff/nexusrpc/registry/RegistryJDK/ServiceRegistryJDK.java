@@ -16,7 +16,7 @@ public class ServiceRegistryJDK implements ServiceRegistry {
     }
 
     @Override
-    public InetSocketAddress getAddressByInterfaceName(String interfaceName) {
+    public InetSocketAddress lookup(String interfaceName) {
         if (!serviceMap.containsKey(interfaceName)) {
             return null;
         }

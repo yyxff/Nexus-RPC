@@ -6,5 +6,5 @@ public interface ServiceRegistry {
 
     void register(String interfaceName, InetSocketAddress address);
 
-    InetSocketAddress getAddressByInterfaceName(String interfaceName);
+    InetSocketAddress lookup(String interfaceName);
 }
