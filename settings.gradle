@@ -6,4 +6,5 @@ include 'rpc-client'
 include 'rpc-server'
 include 'rpc-registry'
 include 'rpc-example-service'
+include 'rpc-example-client'
 

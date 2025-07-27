@@ -1,0 +1,31 @@
+plugins {
+    id 'application'
+}
+
+group = 'io.github.yyxff'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+
+dependencies {
+    implementation project(':rpc-client')
+}
+
+tasks.register('runRpcClient', JavaExec) {
+    group = 'application'
+    description = 'Run the example rpc client'
+    mainClass = 'com.github.yyxff.nexusrpc.exampleclient.ClientMain'
+    classpath = sourceSets.main.runtimeClasspath
+}

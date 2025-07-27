@@ -34,7 +34,7 @@ public class ServerMain {
      */
     private static void addServices(ServiceMap serviceMap) {
         // Service Hello
-        serviceMap.addService("ServiceHello", new ServiceHello());
+        serviceMap.addService(ServiceHello.class.getSimpleName(), new ServiceHello());
     }
 
     /**

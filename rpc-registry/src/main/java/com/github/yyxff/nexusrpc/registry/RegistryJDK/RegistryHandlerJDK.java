@@ -47,13 +47,18 @@ public class RegistryHandlerJDK implements RegistryHandler {
             respond(exchange, response);
 
         } else if (path.equals("/lookup")) {
-            serviceRegistry.lookup(req.serviceName);
+            logger.info("Lookup service: " + req.serviceName);
+
+            InetSocketAddress inetSocketAddress = serviceRegistry.lookup(req.serviceName);
+
+            logger.info("Found service: " + req.serviceName + ", server: "+inetSocketAddress);
+
 
             // Response
             RegistryResponse response = new RegistryResponse();
             response.success = true;
-            response.host = req.host;
-            response.port = req.port;
+            response.host = inetSocketAddress.getHostName();
+            response.port = inetSocketAddress.getPort();
             // Respond
             respond(exchange, response);
         }

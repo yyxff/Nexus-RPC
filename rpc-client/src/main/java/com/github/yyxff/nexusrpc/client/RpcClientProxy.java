@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import com.github.yyxff.nexusrpc.common.RpcRequest;
 import com.github.yyxff.nexusrpc.common.RpcResponse;
+import java.util.logging.Logger;
 
 public class RpcClientProxy implements InvocationHandler {
 
@@ -15,6 +16,8 @@ public class RpcClientProxy implements InvocationHandler {
      * The client instance proxied by this class
      */
     private final RpcClient rpcClient;
+    private static final Logger logger = Logger.getLogger(RpcClientProxy.class.getName());
+
 
     public RpcClientProxy(RpcClient rpcClient) {
         this.rpcClient = rpcClient;
@@ -54,12 +57,12 @@ public class RpcClientProxy implements InvocationHandler {
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         RpcRequest rpcRequest = new RpcRequest(
                 UUID.randomUUID().toString(),
-                method.getDeclaringClass().getName(),
+                method.getDeclaringClass().getSimpleName(),
                 method.getName(),
                 args,
                 method.getParameterTypes()
         );
-        RpcResponse response = rpcClient.sendRequest(rpcRequest);
+        RpcResponse response = rpcClient.sendRequest(rpcRequest.getInterfaceName(), rpcRequest);
         return response.getResult();
     }
 }

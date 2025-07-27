@@ -4,7 +4,7 @@ import com.github.yyxff.nexusrpc.server.ServiceProvider;
 
 public class ServiceHello implements ServiceProvider {
 
-    String hello(){
-        return "Hello from Nexus RPC Service!";
+    String hello(String name){
+        return "Hello " + name + "! This is Nexus RPC Server!";
     }
 }
