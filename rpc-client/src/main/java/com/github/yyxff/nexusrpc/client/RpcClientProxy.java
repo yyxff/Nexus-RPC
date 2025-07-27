@@ -13,7 +13,7 @@ import java.util.logging.Logger;
 public class RpcClientProxy implements InvocationHandler {
 
     /**
-     * The client instance proxied by this class
+     * The client that sends request to registry and rpc server
      */
     private final RpcClient rpcClient;
     private static final Logger logger = Logger.getLogger(RpcClientProxy.class.getName());
@@ -63,6 +63,7 @@ public class RpcClientProxy implements InvocationHandler {
                 method.getParameterTypes()
         );
         RpcResponse response = rpcClient.sendRequest(rpcRequest.getInterfaceName(), rpcRequest);
+//        logger.info(response.toString());
         return response.getResult();
     }
 }

@@ -8,6 +8,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 public class RpcDecoder extends ByteToMessageDecoder{
 
@@ -20,18 +21,23 @@ public class RpcDecoder extends ByteToMessageDecoder{
 
     private final Serializer serializer;
 
+    private static final Logger logger = Logger.getLogger(RpcDecoder.class.getName());
+
+
     public RpcDecoder(Serializer serializer) {
         this.serializer = serializer;
     }
 
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
+//        logger.info("RpcDecoder decode start");
         // Not enough header bytes
         if (in.readableBytes() < headerBytes) {
             return;
         }
         // Not enough message length
         int length = in.getInt(in.readerIndex());
+//        logger.info("decode length: " + length);
         if (in.readableBytes() + headerBytes < length) {
             return;
         }

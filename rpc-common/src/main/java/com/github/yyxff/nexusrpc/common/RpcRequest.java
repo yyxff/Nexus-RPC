@@ -1,6 +1,8 @@
 package com.github.yyxff.nexusrpc.common;
 
-public class RpcRequest {
+import java.io.Serializable;
+
+public class RpcRequest implements Serializable {
     private String requestID;
     private String interfaceName;
     private String methodName;

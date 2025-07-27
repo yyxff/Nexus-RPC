@@ -1,6 +1,8 @@
 package com.github.yyxff.nexusrpc.common;
 
-public class RpcResponse {
+import java.io.Serializable;
+
+public class RpcResponse implements Serializable {
     private String responseID;
     private Object result;
     private Class<?> resultType;

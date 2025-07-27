@@ -3,21 +3,22 @@ package com.github.yyxff.nexusrpc.server;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Logger;
 
 /**
  * Map from interfaceName to actual service instance
  */
 public class ServiceMap {
 
-    private final Map<String, ServiceProvider> serviceMap = new ConcurrentHashMap<>();
+    private final Map<String, Object> serviceMap = new ConcurrentHashMap<>();
+    private static final Logger logger = Logger.getLogger(ServiceMap.class.getName());
+
 
     // This func should be called before register
-    public void addService(String interfaceName, ServiceProvider serviceProvider){
+    public void addService(String interfaceName,  Object serviceProvider){
+        logger.info("Added service: "+interfaceName);
         serviceMap.put(interfaceName, serviceProvider);
     }
 
@@ -30,9 +31,16 @@ public class ServiceMap {
         if (!serviceMap.containsKey(interfaceName)) {
             throw new NoSuchMethodException("No such service: " + interfaceName);
         }
-        ServiceProvider serviceProvider = serviceMap.get(interfaceName);
+        logger.info(
+                "Found service: "+interfaceName
+                +", method: "+methodName
+                +", param types: "+ Arrays.toString(paramTypes)
+                +", args: "+Arrays.toString(args));
+        Object serviceProvider = serviceMap.get(interfaceName);
         Method method = serviceProvider.getClass().getMethod(methodName, paramTypes);
+        logger.info("Found method: "+method);
         Object result = method.invoke(serviceProvider, args);
+        logger.info("Got result: "+result);
         return result;
     }
 }
