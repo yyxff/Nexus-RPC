@@ -17,3 +17,9 @@ dependencies {
 test {
     useJUnitPlatform()
 }
+
+dependencies {
+    implementation project(':rpc-common')
+    implementation project(':rpc-registry')
+    implementation project(':rpc-core')
+}

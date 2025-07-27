@@ -18,9 +18,14 @@ test {
     useJUnitPlatform()
 }
 
-tasks.register('runRegistry', JavaExec) {
+dependencies {
+    implementation project(':rpc-server')
+    implementation project(':rpc-registry')
+}
+
+tasks.register('runRpcServer', JavaExec) {
     group = 'application'
-    description = 'Run the registry server'
-    mainClass = 'com.github.yyxff.nexusrpc.registry.ServiceRegistryMain'
+    description = 'Run the example rpc server'
+    mainClass = 'com.github.yyxff.nexusrpc.exampleservice.ServerMain'
     classpath = sourceSets.main.runtimeClasspath
 }

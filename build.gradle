@@ -1,5 +1,5 @@
 plugins {
-    id 'java'
+    id 'application'
 }
 
 group = 'io.github.yyxff'
@@ -13,11 +13,12 @@ subprojects {
     }
 
     dependencies {
-        implementation "com.alibaba.nacos:nacos-client:2.1.0"
         implementation "io.netty:netty-all:4.1.73.Final"
+        implementation "com.alibaba.nacos:nacos-client:2.1.0"
     }
 }
 
 test {
     useJUnitPlatform()
 }
+

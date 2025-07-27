@@ -9,8 +9,12 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/rpc-client" />
             <option value="$PROJECT_DIR$/rpc-common" />
             <option value="$PROJECT_DIR$/rpc-core" />
+            <option value="$PROJECT_DIR$/rpc-example-service" />
+            <option value="$PROJECT_DIR$/rpc-registry" />
+            <option value="$PROJECT_DIR$/rpc-server" />
           </set>
         </option>
       </GradleProjectSettings>
