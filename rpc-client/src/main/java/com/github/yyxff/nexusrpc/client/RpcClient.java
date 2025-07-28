@@ -12,20 +12,28 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 
 import java.net.InetSocketAddress;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Logger;
 
 public class RpcClient {
 
-    private final ServiceMap serviceMap = new ServiceMap();
+    private final ServiceMap serviceMap;
+    private final LoadBalancer loadBalancer;
     private final RpcRequestHandler rpcRequestHandler = new RpcRequestHandler();
     private static final Logger logger = Logger.getLogger(RpcClient.class.getName());
 
+    public RpcClient(ServiceMap serviceMap, LoadBalancer loadBalancer) {
+        this.serviceMap = serviceMap;
+        this.loadBalancer = loadBalancer;
+    }
 
     RpcResponse sendRequest(String serviceName, RpcRequest request) {
-        InetSocketAddress inetSocketAddress = serviceMap.get(serviceName);
-        logger.info("get server address: " + inetSocketAddress);
+        List<InetSocketAddress> serverList = serviceMap.get(serviceName);
+        InetSocketAddress serverAddress = loadBalancer.selectServer(serverList);
+        logger.info("Server list: " + serverList);
+        logger.info("Selected address: " + serverAddress);
 
         EventLoopGroup group = new NioEventLoopGroup();
 
@@ -46,7 +54,7 @@ public class RpcClient {
                         }
                     });
 
-            ChannelFuture future = bootstrap.connect(inetSocketAddress.getHostName(), inetSocketAddress.getPort()).sync();
+            ChannelFuture future = bootstrap.connect(serverAddress.getHostName(), serverAddress.getPort()).sync();
             Channel channel = future.channel();
 
             channel.writeAndFlush(request).sync(); // 发送请求
