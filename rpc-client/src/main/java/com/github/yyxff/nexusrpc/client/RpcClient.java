@@ -31,7 +31,7 @@ public class RpcClient {
 
     RpcResponse sendRequest(String serviceName, RpcRequest request) {
         List<InetSocketAddress> serverList = serviceMap.get(serviceName);
-        InetSocketAddress serverAddress = loadBalancer.selectServer(serverList);
+        InetSocketAddress serverAddress = loadBalancer.selectServer(serviceName, serverList);
         logger.info("Server list: " + serverList);
         logger.info("Selected address: " + serverAddress);
 

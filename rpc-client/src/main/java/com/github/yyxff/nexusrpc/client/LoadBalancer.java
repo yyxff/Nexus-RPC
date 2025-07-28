@@ -5,7 +5,7 @@ import java.util.List;
 
 public interface LoadBalancer {
 
-    InetSocketAddress selectServer(List<InetSocketAddress> inetSocketAddressList);
+    InetSocketAddress selectServer(String serviceName, List<InetSocketAddress> inetSocketAddressList);
 
 
 }
