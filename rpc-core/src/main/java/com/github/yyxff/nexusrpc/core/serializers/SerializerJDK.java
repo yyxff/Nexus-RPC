@@ -1,6 +1,6 @@
-package com.gitub.yyxff.nexusrpc.core.serializers;
+package com.github.yyxff.nexusrpc.core.serializers;
 
-import com.gitub.yyxff.nexusrpc.core.Serializer;
+import com.github.yyxff.nexusrpc.core.Serializer;
 
 import java.io.*;
 

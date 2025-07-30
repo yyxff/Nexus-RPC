@@ -1,4 +1,4 @@
-package com.gitub.yyxff.nexusrpc.core;
+package com.github.yyxff.nexusrpc.core;
 
 public interface Serializer {
 

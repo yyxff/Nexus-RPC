@@ -20,6 +20,7 @@ test {
 
 
 dependencies {
+    implementation project(':rpc-core')
     implementation project(':rpc-client')
 }
 

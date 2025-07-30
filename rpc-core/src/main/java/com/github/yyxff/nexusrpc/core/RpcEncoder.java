@@ -1,4 +1,4 @@
-package com.gitub.yyxff.nexusrpc.core;
+package com.github.yyxff.nexusrpc.core;
 
 import com.github.yyxff.nexusrpc.common.RpcRequest;
 import com.github.yyxff.nexusrpc.common.RpcResponse;

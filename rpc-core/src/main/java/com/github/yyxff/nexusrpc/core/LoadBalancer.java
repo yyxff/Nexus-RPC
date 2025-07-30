@@ -1,4 +1,4 @@
-package com.github.yyxff.nexusrpc.client;
+package com.github.yyxff.nexusrpc.core;
 
 import java.net.InetSocketAddress;
 import java.util.List;
