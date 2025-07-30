@@ -3,11 +3,15 @@ package com.github.yyxff.nexusrpc.core;
 import java.net.InetSocketAddress;
 import java.util.*;
 
+// TODO: concurrent
+// TODO: specified to service
 public class CircuitBreaker {
 
     private final Map<InetSocketAddress, Long> availableTime = new HashMap();
     private final Map<InetSocketAddress, ArrayList<Integer>> recentSuccess = new HashMap();
+    // 50% success
     private final double threshold = 0.5;
+    // 5000ms
     private final long openTimeout = 5000;
 
     /**

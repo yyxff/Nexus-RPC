@@ -12,6 +12,9 @@ import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.timeout.IdleStateHandler;
+import io.netty.handler.timeout.ReadTimeoutHandler;
+import io.netty.handler.timeout.WriteTimeoutHandler;
 
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
@@ -19,14 +22,24 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 public class RpcClient {
 
     private final ServiceMap serviceMap;
     private final LoadBalancer loadBalancer;
-    private final RpcRequestHandler rpcRequestHandler = new RpcRequestHandler();
     private final CircuitBreaker circuitBreaker = new CircuitBreaker();
+
+    // timeout for read or write: 5s
+    private final int timeout = 5;
+
+    /**
+     * timeout if both read and write is idle: 10s
+     * if happened, send a heartbeat package to server to check alive
+     */
+    private final int allIdleTime = 10;
+
     private static final Logger logger = Logger.getLogger(RpcClient.class.getName());
 
     public RpcClient(ServiceMap serviceMap, LoadBalancer loadBalancer) {
@@ -35,10 +48,7 @@ public class RpcClient {
     }
 
     RpcResponse sendRequest(String serviceName, RpcRequest request) {
-        List<InetSocketAddress> serverList = serviceMap.get(serviceName);
-        List<InetSocketAddress> availableServerList = new ArrayList<>(circuitBreaker.filter(serverList));
-        InetSocketAddress serverAddress = loadBalancer.selectServer(serviceName, serverList);
-        logger.info("Server list: " + serverList);
+        InetSocketAddress serverAddress = getAvailableServer(serviceName);
         logger.info("Selected address: " + serverAddress);
 
         EventLoopGroup group = new NioEventLoopGroup();
@@ -46,6 +56,7 @@ public class RpcClient {
         try {
             Bootstrap bootstrap = new Bootstrap();
             CompletableFuture<RpcResponse> resultFuture = new CompletableFuture<>();
+            RpcRequestHandler rpcRequestHandler = new RpcRequestHandler(serverAddress, request, circuitBreaker);
             rpcRequestHandler.addFuture(resultFuture);
 
             bootstrap.group(group)
@@ -56,6 +67,7 @@ public class RpcClient {
                             ChannelPipeline p = ch.pipeline();
                             p.addLast(new RpcDecoder(new SerializerJDK())); // 解码器
                             p.addLast(new RpcEncoder(new SerializerJDK())); // Java对象编码器
+                            p.addLast(new IdleStateHandler(timeout, timeout, allIdleTime, TimeUnit.SECONDS));
                             p.addLast(rpcRequestHandler); // 处理响应
                         }
                     });
@@ -73,5 +85,20 @@ public class RpcClient {
         } catch (ExecutionException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    /**
+     * Get available server by serviceName
+     * 1. Get all servers from serviceMap
+     * 2. Filter servers by circuitBreaker
+     * 3. Select a server by loadBalancer
+     * @param serviceName
+     * @return
+     */
+    InetSocketAddress getAvailableServer(String serviceName) {
+        List<InetSocketAddress> serverList = serviceMap.get(serviceName);
+        List<InetSocketAddress> availableServerList = new ArrayList<>(circuitBreaker.filter(serverList));
+        logger.info("Available server list: " + availableServerList);
+        return loadBalancer.selectServer(serviceName, availableServerList);
     }
 }
