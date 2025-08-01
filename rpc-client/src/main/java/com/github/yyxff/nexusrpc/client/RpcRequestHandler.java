@@ -12,6 +12,11 @@ import java.util.concurrent.CompletableFuture;
 import java.util.logging.Logger;
 
 // TODO: multiplexing
+
+/**
+ * This instance will be run in another thread with event loop
+ * So we need a future to wait the response
+ */
 public class RpcRequestHandler extends SimpleChannelInboundHandler<RpcResponse> {
 
     private RpcResponse rpcResponse;
@@ -35,6 +40,12 @@ public class RpcRequestHandler extends SimpleChannelInboundHandler<RpcResponse> 
         future.complete(msg);
     }
 
+    /**
+     * This will be call when timeout
+     * @param ctx
+     * @param evt
+     * @throws Exception
+     */
     @Override
     public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
         if (evt instanceof IdleStateEvent) {

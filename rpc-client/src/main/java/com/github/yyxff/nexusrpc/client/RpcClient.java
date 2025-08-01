@@ -25,10 +25,14 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
+
 public class RpcClient {
 
+    // Mapping from service name to server list
     private final ServiceMap serviceMap;
+    // Load balancer
     private final LoadBalancer loadBalancer;
+    // Circuit breaker
     private final CircuitBreaker circuitBreaker = new CircuitBreaker();
 
     // timeout for read or write: 5s
@@ -40,6 +44,7 @@ public class RpcClient {
      */
     private final int allIdleTime = 10;
 
+    // Logger
     private static final Logger logger = Logger.getLogger(RpcClient.class.getName());
 
     public RpcClient(ServiceMap serviceMap, LoadBalancer loadBalancer) {
@@ -47,6 +52,13 @@ public class RpcClient {
         this.loadBalancer = loadBalancer;
     }
 
+    /**
+     * 1. Get available service
+     * 2. Send remote call by netty
+     * @param serviceName
+     * @param request
+     * @return Response of remote call
+     */
     RpcResponse sendRequest(String serviceName, RpcRequest request) {
         InetSocketAddress serverAddress = getAvailableServer(serviceName);
         logger.info("Selected address: " + serverAddress);

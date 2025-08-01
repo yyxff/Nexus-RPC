@@ -7,11 +7,16 @@ import java.util.*;
 // TODO: specified to service
 public class CircuitBreaker {
 
+    // Mapping form server to available time
     private final Map<InetSocketAddress, Long> availableTime = new HashMap();
+
+    // Mapping from server to recent success record (5 recently records)
     private final Map<InetSocketAddress, ArrayList<Integer>> recentSuccess = new HashMap();
-    // 50% success
+
+    // If success ratio < 50% success, open circuit(ban) this server
     private final double threshold = 0.5;
-    // 5000ms
+
+    // If banned, the server will be banned for 5000ms
     private final long openTimeout = 5000;
 
     /**

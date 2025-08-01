@@ -15,10 +15,18 @@ import java.util.logging.Logger;
 
 public class LookUpHandler {
 
+    // Url to look up server list of a service
     private final String lookUpUrl = "http://localhost:8888/lookup";
+    // Logger
     private static final Logger logger = Logger.getLogger(LookUpHandler.class.getName());
 
 
+    /**
+     * Send a request to look up server list of a service
+     * @param interfaceName
+     * @return Registry response
+     * @throws IOException
+     */
     public RegistryResponse lookUp(String interfaceName) throws IOException {
 
         // Construct request body

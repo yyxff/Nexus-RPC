@@ -16,6 +16,7 @@ public class RpcDecoder extends ByteToMessageDecoder{
      * The first 4 bytes: message length
      * The 5th bytes: 0x00 = RpcRequest
      *                0x01 = RpcResponse
+     * Rest bytes: serialized message body
      */
     private final int headerBytes = 5;
 
