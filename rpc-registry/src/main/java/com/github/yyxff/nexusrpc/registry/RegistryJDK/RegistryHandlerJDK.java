@@ -26,33 +26,35 @@ public class RegistryHandlerJDK implements RegistryHandler {
         this.serviceRegistry = serviceRegistry;
     }
 
-
+    /**
+     * Parse request and handle it
+     * @param exchange the exchange containing the request from the
+     *                 client and used to send the response
+     * @throws IOException
+     */
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         logger.info(exchange.getRequestMethod() + " " + exchange.getRequestURI());
         String path = exchange.getRequestURI().getPath();
 
+        // Get request body
         InputStream requestBody = exchange.getRequestBody();
         RegistryRequest req = objectMapper.readValue(requestBody, RegistryRequest.class);
 
         if (path.equals("/register")) {
             logger.info("Register request: " + req.serviceName+", from "+new InetSocketAddress(req.host, req.port));
+            // Register
             serviceRegistry.register(req.serviceName, new InetSocketAddress(req.host, req.port));
-
-
             // Response
             RegistryResponse response = new RegistryResponse();
             response.success = true;
             // Respond
             respond(exchange, response);
-
         } else if (path.equals("/lookup")) {
             logger.info("Lookup service: " + req.serviceName);
-
+            // Look up
             InetSocketAddress inetSocketAddress = serviceRegistry.lookup(req.serviceName);
-
             logger.info("Found service: " + req.serviceName + ", server: "+inetSocketAddress);
-
 
             // Response
             RegistryResponse response = new RegistryResponse();
