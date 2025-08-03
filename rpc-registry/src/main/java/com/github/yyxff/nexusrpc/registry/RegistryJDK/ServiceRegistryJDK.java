@@ -1,38 +1,45 @@
 package com.github.yyxff.nexusrpc.registry.RegistryJDK;
 
+import com.alibaba.nacos.shaded.org.checkerframework.checker.units.qual.A;
 import com.github.yyxff.nexusrpc.registry.ServiceRegistry;
 
 import java.net.InetSocketAddress;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ServiceRegistryJDK implements ServiceRegistry {
 
-    private final Map<String, InetSocketAddress> serviceMap = new ConcurrentHashMap<>();
+    private final Map<String, List<InetSocketAddress>> serviceMap = new ConcurrentHashMap<>();
 
     /**
      * Register a server by service name
      * Todo: save a server list for a service name
-     * @param interfaceName
+     * @param serviceName
      * @param address
      */
     @Override
-    public void register(String interfaceName, InetSocketAddress address) {
-        serviceMap.put(interfaceName, address);
+    public void register(String serviceName, InetSocketAddress address) {
+        if (!serviceMap.containsKey(serviceName)) {
+            serviceMap.put(serviceName, new ArrayList<>());
+        }
+        serviceMap.get(serviceName).add(address);
     }
 
     /**
      * Look up a server list by service name
      * If not found, return null
-     * @param interfaceName
+     * @param serviceName
      * @return
      */
     @Override
-    public InetSocketAddress lookup(String interfaceName) {
-        if (!serviceMap.containsKey(interfaceName)) {
+    public List<InetSocketAddress> lookup(String serviceName) {
+        if (!serviceMap.containsKey(serviceName) || serviceMap.get(serviceName).size() == 0) {
             return null;
         }
-        return serviceMap.get(interfaceName);
+        return serviceMap.get(serviceName);
     }
 
 }

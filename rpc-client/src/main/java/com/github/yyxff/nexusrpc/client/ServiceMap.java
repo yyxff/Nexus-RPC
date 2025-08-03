@@ -29,7 +29,7 @@ public class ServiceMap {
                 serviceMap.put(serviceName, new ArrayList<>());
             }
             serviceMap.get(serviceName)
-                      .add(new InetSocketAddress(registryResponse.host, registryResponse.port));
+                      .addAll(registryResponse.serverList);
         }catch (Exception e) {
             e.printStackTrace();
         }

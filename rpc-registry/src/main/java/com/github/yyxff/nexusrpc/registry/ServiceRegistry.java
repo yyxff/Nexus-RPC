@@ -1,10 +1,11 @@
 package com.github.yyxff.nexusrpc.registry;
 
 import java.net.InetSocketAddress;
+import java.util.List;
 
 public interface ServiceRegistry {
 
     void register(String interfaceName, InetSocketAddress address);
 
-    InetSocketAddress lookup(String interfaceName);
+    List<InetSocketAddress> lookup(String interfaceName);
 }

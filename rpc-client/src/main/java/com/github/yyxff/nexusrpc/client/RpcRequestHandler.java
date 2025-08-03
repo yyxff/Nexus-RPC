@@ -38,10 +38,14 @@ public class RpcRequestHandler extends SimpleChannelInboundHandler<RpcResponse> 
     protected void channelRead0(ChannelHandlerContext ctx, RpcResponse msg) throws Exception {
         this.rpcResponse = msg;
         future.complete(msg);
+        // Close connection, removed after long connection implemented
+        ctx.close();
     }
 
     /**
      * This will be call when timeout
+     * But this should be used to stay alive in the future
+     * timeout change be checked by another timer task
      * @param ctx
      * @param evt
      * @throws Exception

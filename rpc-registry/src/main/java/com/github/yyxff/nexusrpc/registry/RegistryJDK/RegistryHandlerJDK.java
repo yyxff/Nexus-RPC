@@ -12,6 +12,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.logging.Logger;
 
 
@@ -53,14 +54,13 @@ public class RegistryHandlerJDK implements RegistryHandler {
         } else if (path.equals("/lookup")) {
             logger.info("Lookup service: " + req.serviceName);
             // Look up
-            InetSocketAddress inetSocketAddress = serviceRegistry.lookup(req.serviceName);
-            logger.info("Found service: " + req.serviceName + ", server: "+inetSocketAddress);
+            List<InetSocketAddress> serverList = serviceRegistry.lookup(req.serviceName);
+            logger.info("Found server list: " + serverList);
 
             // Response
             RegistryResponse response = new RegistryResponse();
             response.success = true;
-            response.host = inetSocketAddress.getHostName();
-            response.port = inetSocketAddress.getPort();
+            response.serverList = serverList;
             // Respond
             respond(exchange, response);
         }
