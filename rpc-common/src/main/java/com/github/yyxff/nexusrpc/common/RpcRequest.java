@@ -4,9 +4,16 @@ import java.io.Serializable;
 
 public class RpcRequest implements Serializable {
     private String requestID;
+    // We need this string to locate a specific service
     private String interfaceName;
+
+    // We need this to locate the target method on service
     private String methodName;
+
+    // Params of this call
     private Object[] params;
+
+    // Params Type to locate the method
     private Class<?>[] paramsType;
 
     public RpcRequest(String requestID,
