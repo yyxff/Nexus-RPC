@@ -16,8 +16,11 @@ public class ClientMain {
     public static void main(String[] args) throws IOException {
         RpcClient rpcClient = new RpcClient(new ServiceMap(), new LoadBalancerRandom());
         RpcClientProxy proxy = new RpcClientProxy(rpcClient);
+
+        // Get proxy instance of specific service
         ServiceHello serviceHello = proxy.getProxy(ServiceHello.class);
 
+        // Do remote call (in sync mode)
         String result = serviceHello.hello("nexus rpc client");
         logger.info("Get response from server: "+result);
     }
