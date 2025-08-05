@@ -2,10 +2,7 @@ package com.github.yyxff.nexusrpc.client;
 
 import com.github.yyxff.nexusrpc.common.RpcRequest;
 import com.github.yyxff.nexusrpc.common.RpcResponse;
-import com.github.yyxff.nexusrpc.core.CircuitBreaker;
-import com.github.yyxff.nexusrpc.core.LoadBalancer;
-import com.github.yyxff.nexusrpc.core.RpcDecoder;
-import com.github.yyxff.nexusrpc.core.RpcEncoder;
+import com.github.yyxff.nexusrpc.core.*;
 import com.github.yyxff.nexusrpc.core.serializers.SerializerJDK;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
@@ -13,12 +10,9 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.timeout.IdleStateHandler;
-import io.netty.handler.timeout.ReadTimeoutHandler;
-import io.netty.handler.timeout.WriteTimeoutHandler;
 
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -68,7 +62,7 @@ public class RpcClient {
         try {
             Bootstrap bootstrap = new Bootstrap();
             CompletableFuture<RpcResponse> resultFuture = new CompletableFuture<>();
-            RpcRequestHandler rpcRequestHandler = new RpcRequestHandler(serverAddress, request, circuitBreaker);
+            RpcRequestHandler rpcRequestHandler = new RpcRequestHandler(serverAddress, circuitBreaker);
             rpcRequestHandler.addFuture(resultFuture);
 
             bootstrap.group(group)

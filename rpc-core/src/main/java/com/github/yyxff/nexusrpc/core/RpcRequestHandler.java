@@ -1,8 +1,6 @@
-package com.github.yyxff.nexusrpc.client;
+package com.github.yyxff.nexusrpc.core;
 
-import com.github.yyxff.nexusrpc.common.RpcRequest;
 import com.github.yyxff.nexusrpc.common.RpcResponse;
-import com.github.yyxff.nexusrpc.core.CircuitBreaker;
 import io.netty.channel.*;
 import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
@@ -23,13 +21,11 @@ public class RpcRequestHandler extends SimpleChannelInboundHandler<RpcResponse> 
     private CompletableFuture<RpcResponse> future;
 
     private final InetSocketAddress serverAddress;
-    private final RpcRequest request;
     private final CircuitBreaker circuitBreaker;
     private static final Logger logger = Logger.getLogger(RpcRequestHandler.class.getName());
 
-    public RpcRequestHandler(InetSocketAddress server, RpcRequest rpcRequest, CircuitBreaker circuitBreaker) {
+    public RpcRequestHandler(InetSocketAddress server, CircuitBreaker circuitBreaker) {
         this.serverAddress = server;
-        this.request = rpcRequest;
         this.circuitBreaker = circuitBreaker;
     }
 
