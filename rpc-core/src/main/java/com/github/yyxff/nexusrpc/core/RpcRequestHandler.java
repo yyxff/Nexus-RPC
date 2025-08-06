@@ -1,14 +1,14 @@
-package com.github.yyxff.nexusrpc.client;
+package com.github.yyxff.nexusrpc.core;
 
-import com.github.yyxff.nexusrpc.common.RpcRequest;
 import com.github.yyxff.nexusrpc.common.RpcResponse;
-import com.github.yyxff.nexusrpc.core.CircuitBreaker;
 import io.netty.channel.*;
 import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
 
 import java.net.InetSocketAddress;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
 // TODO: multiplexing
@@ -19,27 +19,33 @@ import java.util.logging.Logger;
  */
 public class RpcRequestHandler extends SimpleChannelInboundHandler<RpcResponse> {
 
-    private RpcResponse rpcResponse;
-    private CompletableFuture<RpcResponse> future;
-
     private final InetSocketAddress serverAddress;
-    private final RpcRequest request;
     private final CircuitBreaker circuitBreaker;
+    private final Dispatcher dispatcher;
+
     private static final Logger logger = Logger.getLogger(RpcRequestHandler.class.getName());
 
-    public RpcRequestHandler(InetSocketAddress server, RpcRequest rpcRequest, CircuitBreaker circuitBreaker) {
+    public RpcRequestHandler(InetSocketAddress server,
+                             CircuitBreaker circuitBreaker,
+                             Dispatcher dispatcher) {
         this.serverAddress = server;
-        this.request = rpcRequest;
         this.circuitBreaker = circuitBreaker;
+        this.dispatcher = dispatcher;
     }
 
-
+    /**
+     * 1. Get result future by id in response
+     * 2. Complete it then remove it
+     * @param ctx           the {@link ChannelHandlerContext} which this {@link SimpleChannelInboundHandler}
+     *                      belongs to
+     * @param msg           the message to handle
+     * @throws Exception
+     */
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, RpcResponse msg) throws Exception {
-        this.rpcResponse = msg;
-        future.complete(msg);
-        // Close connection, removed after long connection implemented
-        ctx.close();
+        String id = msg.getResponseID();
+        // Complete future
+        dispatcher.complete(id, msg);
     }
 
     /**
@@ -69,14 +75,5 @@ public class RpcRequestHandler extends SimpleChannelInboundHandler<RpcResponse> 
         } else {
             super.userEventTriggered(ctx, evt);
         }
-    }
-
-
-    RpcResponse getResponse() {
-        return rpcResponse;
-    }
-
-    public void addFuture(CompletableFuture<RpcResponse> future) {
-        this.future = future;
     }
 }
