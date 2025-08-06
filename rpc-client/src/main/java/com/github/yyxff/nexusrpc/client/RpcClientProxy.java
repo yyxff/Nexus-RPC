@@ -62,7 +62,7 @@ public class RpcClientProxy implements InvocationHandler {
                 args,
                 method.getParameterTypes()
         );
-        RpcResponse response = rpcClient.sendRequest(rpcRequest.getInterfaceName(), rpcRequest);
+        RpcResponse response = rpcClient.remoteCall(rpcRequest.getInterfaceName(), rpcRequest);
 //        logger.info(response.toString());
         return response.getResult();
     }

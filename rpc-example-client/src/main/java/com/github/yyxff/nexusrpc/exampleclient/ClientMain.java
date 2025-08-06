@@ -20,5 +20,8 @@ public class ClientMain {
 
         String result = serviceHello.hello("nexus rpc client");
         logger.info("Get response from server: "+result);
+
+        result = serviceHello.hello("nexus rpc client");
+        logger.info("Get response from server: "+result);
     }
 }
