@@ -40,7 +40,11 @@ public class ServerMain {
 
             // Start rpc server
             logger.info("Start Rpc server");
-            RpcServer rpcServer = new RpcServer(serviceMap, 8080);
+            RpcServer rpcServer = new RpcServer(
+                    serviceMap,
+                    8080,
+                    ComponentFactory.getSerializer(config),
+                    ComponentFactory.getSerializer(config));
             rpcServer.start();
         } catch (NacosException e) {
             e.printStackTrace();

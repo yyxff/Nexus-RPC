@@ -1,4 +1,4 @@
-package com.github.yyxff.nexusrpc.common;
+package com.github.yyxff.nexusrpc.core.messagestruct;
 
 import java.io.Serializable;
 

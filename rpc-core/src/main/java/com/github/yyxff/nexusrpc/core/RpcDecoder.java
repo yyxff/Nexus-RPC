@@ -1,7 +1,7 @@
 package com.github.yyxff.nexusrpc.core;
 
-import com.github.yyxff.nexusrpc.common.RpcRequest;
-import com.github.yyxff.nexusrpc.common.RpcResponse;
+import com.github.yyxff.nexusrpc.core.messagestruct.RpcRequest;
+import com.github.yyxff.nexusrpc.core.messagestruct.RpcResponse;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;

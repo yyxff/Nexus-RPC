@@ -1,9 +1,12 @@
 package com.github.yyxff.nexusrpc.common.utils;
 
+import org.yaml.snakeyaml.serializer.Serializer;
+
 import java.util.List;
 
 public class RpcConfig {
     public RegistryConfig registry;
+    public SerializerConfig serializer;
     // public ServerConfig server;
     // public ClientConfig client;
 
@@ -12,6 +15,10 @@ public class RpcConfig {
         public NacosConfig nacos;
         public JDKRegistryConfig JDK;
         public EtcdConfig etcd;
+    }
+
+    public static class SerializerConfig {
+        public String type;
     }
 
     public static class NacosConfig {

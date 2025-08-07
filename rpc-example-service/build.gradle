@@ -22,6 +22,7 @@ dependencies {
     implementation project(':rpc-server')
     implementation project(':rpc-registry')
     implementation project(':rpc-common')
+    implementation project(':rpc-core')
 }
 
 tasks.register('runRpcServer', JavaExec) {

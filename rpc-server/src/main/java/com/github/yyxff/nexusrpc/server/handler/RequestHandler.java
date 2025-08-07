@@ -1,7 +1,7 @@
 package com.github.yyxff.nexusrpc.server.handler;
 
-import com.github.yyxff.nexusrpc.common.RpcRequest;
-import com.github.yyxff.nexusrpc.common.RpcResponse;
+import com.github.yyxff.nexusrpc.core.messagestruct.RpcRequest;
+import com.github.yyxff.nexusrpc.core.messagestruct.RpcResponse;
 import com.github.yyxff.nexusrpc.server.ServiceMap;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;

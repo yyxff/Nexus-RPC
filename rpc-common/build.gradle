@@ -16,6 +16,7 @@ dependencies {
     implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.17.0'
 
     implementation project(':rpc-registry')
+    implementation project(':rpc-core')
 }
 
 test {

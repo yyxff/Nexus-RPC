@@ -6,8 +6,8 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.UUID;
 
-import com.github.yyxff.nexusrpc.common.RpcRequest;
-import com.github.yyxff.nexusrpc.common.RpcResponse;
+import com.github.yyxff.nexusrpc.core.messagestruct.RpcRequest;
+import com.github.yyxff.nexusrpc.core.messagestruct.RpcResponse;
 import java.util.logging.Logger;
 
 public class RpcClientProxy implements InvocationHandler {

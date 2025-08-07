@@ -1,5 +1,9 @@
 package com.github.yyxff.nexusrpc.server;
 
+import com.github.yyxff.nexusrpc.common.utils.ComponentFactory;
+import com.github.yyxff.nexusrpc.common.utils.ConfigLoader;
+import com.github.yyxff.nexusrpc.common.utils.RpcConfig;
+import com.github.yyxff.nexusrpc.core.Serializer;
 import com.github.yyxff.nexusrpc.server.handler.RequestHandler;
 import com.github.yyxff.nexusrpc.core.RpcDecoder;
 import com.github.yyxff.nexusrpc.core.RpcEncoder;
@@ -15,12 +19,16 @@ public class RpcServer {
 
     private final int port;
     private final ServiceMap serviceMap;
+    private final Serializer serializerIn;
+    private final Serializer serializerOut;
     private static final Logger logger = Logger.getLogger(RpcServer.class.getName());
 
 
-    public RpcServer(ServiceMap serviceMap, int port) {
+    public RpcServer(ServiceMap serviceMap, int port, Serializer serializerIn, Serializer serializerOut) {
         this.port = port;
         this.serviceMap = serviceMap;
+        this.serializerIn = serializerIn;
+        this.serializerOut = serializerOut;
     }
 
     /**
@@ -33,6 +41,8 @@ public class RpcServer {
     public void start() throws Exception {
         EventLoopGroup boss = new NioEventLoopGroup(1);
         EventLoopGroup worker = new NioEventLoopGroup();
+
+        RpcConfig config = ConfigLoader.load("../rpc-config.yaml");
         try {
             ServerBootstrap b = new ServerBootstrap();
             logger.setLevel(Level.ALL);
@@ -44,8 +54,8 @@ public class RpcServer {
                         @Override
                         protected void initChannel(SocketChannel ch) {
                             ChannelPipeline p = ch.pipeline();
-                            p.addLast(new RpcDecoder(new SerializerJDK()));
-                            p.addLast(new RpcEncoder(new SerializerJDK()));
+                            p.addLast(new RpcDecoder(serializerIn));
+                            p.addLast(new RpcEncoder(serializerOut));
                             p.addLast(new RequestHandler(serviceMap));
                         }
                     })

@@ -29,7 +29,11 @@ public class ClientMain {
             RegistryClient registry = ComponentFactory.getRegistry(config);
 
             // Make rpc client
-            RpcClient rpcClient = new RpcClient(new ServiceMap(registry), new LoadBalancerRandom());
+            RpcClient rpcClient = new RpcClient(
+                    new ServiceMap(registry),
+                    new LoadBalancerRandom(),
+                    ComponentFactory.getSerializer(config),
+                    ComponentFactory.getSerializer(config));
             RpcClientProxy proxy = new RpcClientProxy(rpcClient);
 
             // Get proxy instance of specific service

@@ -9,3 +9,6 @@ registry:
     address: http://127.0.0.1:2379
   JDK:
     address: 127.0.0.1:8888
+
+serializer:
+  type: JDK

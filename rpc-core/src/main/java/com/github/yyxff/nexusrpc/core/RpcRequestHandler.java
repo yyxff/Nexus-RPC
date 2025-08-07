@@ -1,6 +1,6 @@
 package com.github.yyxff.nexusrpc.core;
 
-import com.github.yyxff.nexusrpc.common.RpcResponse;
+import com.github.yyxff.nexusrpc.core.messagestruct.RpcResponse;
 import io.netty.channel.*;
 import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;

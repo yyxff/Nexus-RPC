@@ -1,24 +1,17 @@
 package com.github.yyxff.nexusrpc.client;
 
-import com.github.yyxff.nexusrpc.common.RpcRequest;
-import com.github.yyxff.nexusrpc.common.RpcResponse;
+import com.github.yyxff.nexusrpc.core.messagestruct.RpcRequest;
+import com.github.yyxff.nexusrpc.core.messagestruct.RpcResponse;
 import com.github.yyxff.nexusrpc.core.*;
 import com.github.yyxff.nexusrpc.core.connectionpool.ConnectionPool;
 import com.github.yyxff.nexusrpc.core.connectionpool.PooledChannel;
-import com.github.yyxff.nexusrpc.core.serializers.SerializerJDK;
-import io.netty.bootstrap.Bootstrap;
-import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.socket.SocketChannel;
-import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.handler.timeout.IdleStateHandler;
 
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 
@@ -47,10 +40,18 @@ public class RpcClient {
     // Logger
     private static final Logger logger = Logger.getLogger(RpcClient.class.getName());
 
-    public RpcClient(ServiceMap serviceMap, LoadBalancer loadBalancer) {
+    public RpcClient(ServiceMap serviceMap,
+                     LoadBalancer loadBalancer,
+                     Serializer serializerIn,
+                     Serializer serializerOut) {
         this.serviceMap = serviceMap;
         this.loadBalancer = loadBalancer;
-        this.connectionPool = new ConnectionPool(new NioEventLoopGroup(), circuitBreaker, dispatcher);
+        this.connectionPool = new ConnectionPool(
+                new NioEventLoopGroup(),
+                circuitBreaker,
+                dispatcher,
+                serializerIn,
+                serializerOut);
     }
 
     /**

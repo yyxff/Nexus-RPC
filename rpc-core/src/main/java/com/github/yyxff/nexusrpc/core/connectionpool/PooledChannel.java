@@ -1,6 +1,6 @@
 package com.github.yyxff.nexusrpc.core.connectionpool;
 
-import com.github.yyxff.nexusrpc.common.RpcRequest;
+import com.github.yyxff.nexusrpc.core.messagestruct.RpcRequest;
 import io.netty.channel.Channel;
 
 import java.util.concurrent.atomic.AtomicBoolean;

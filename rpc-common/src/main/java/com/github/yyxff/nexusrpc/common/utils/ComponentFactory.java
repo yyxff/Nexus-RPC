@@ -1,6 +1,8 @@
 package com.github.yyxff.nexusrpc.common.utils;
 
 import com.alibaba.nacos.api.exception.NacosException;
+import com.github.yyxff.nexusrpc.core.Serializer;
+import com.github.yyxff.nexusrpc.core.serializers.SerializerJDK;
 import com.github.yyxff.nexusrpc.registry.RegistryClient;
 import com.github.yyxff.nexusrpc.registry.registryclient.NacosRegistryClient;
 import com.github.yyxff.nexusrpc.registry.registryclient.RegistryClientJDK;
@@ -28,8 +30,11 @@ public class ComponentFactory {
         }
     }
 
-    // public static RegistryClient getRegistry(RpcConfig config){
-
-    // }
+    public static Serializer getSerializer(RpcConfig config){
+        switch (config.serializer.type) {
+            case "JDK": return new SerializerJDK();
+            default: return null;
+        }
+    }
 
 }

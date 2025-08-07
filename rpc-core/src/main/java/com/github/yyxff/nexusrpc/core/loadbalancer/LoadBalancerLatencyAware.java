@@ -1,7 +1,7 @@
 package com.github.yyxff.nexusrpc.core.loadbalancer;
 
-import com.github.yyxff.nexusrpc.common.utils.WeightedRandom;
 import com.github.yyxff.nexusrpc.core.LoadBalancer;
+import com.github.yyxff.nexusrpc.core.utils.WeightedRandom;
 
 import java.net.InetSocketAddress;
 import java.util.ArrayList;

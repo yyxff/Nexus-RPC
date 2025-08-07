@@ -1,4 +1,4 @@
-package com.github.yyxff.nexusrpc.common.utils;
+package com.github.yyxff.nexusrpc.core.utils;
 
 import java.util.List;
 import java.util.Random;

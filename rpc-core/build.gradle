@@ -18,6 +18,3 @@ test {
     useJUnitPlatform()
 }
 
-dependencies {
-    implementation project(':rpc-common')
-}
