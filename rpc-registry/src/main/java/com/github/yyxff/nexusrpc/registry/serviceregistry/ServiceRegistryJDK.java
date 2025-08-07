@@ -1,11 +1,9 @@
-package com.github.yyxff.nexusrpc.registry.RegistryJDK;
+package com.github.yyxff.nexusrpc.registry.serviceregistry;
 
-import com.alibaba.nacos.shaded.org.checkerframework.checker.units.qual.A;
 import com.github.yyxff.nexusrpc.registry.ServiceRegistry;
 
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

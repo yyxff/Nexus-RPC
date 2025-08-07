@@ -1,5 +1,6 @@
 package com.github.yyxff.nexusrpc.registry;
 
+import com.github.yyxff.nexusrpc.registry.messagestruct.RegistryResponse;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 

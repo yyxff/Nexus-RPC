@@ -1,4 +1,4 @@
-package com.github.yyxff.nexusrpc.registry;
+package com.github.yyxff.nexusrpc.registry.messagestruct;
 
 public class RegistryRequest {
     public String serviceName;

@@ -1,9 +1,7 @@
-package com.github.yyxff.nexusrpc.registry.RegistryJDK;
+package com.github.yyxff.nexusrpc.registry;
 
-import com.github.yyxff.nexusrpc.registry.RegistryHandler;
-import com.github.yyxff.nexusrpc.registry.RegistryRequest;
-import com.github.yyxff.nexusrpc.registry.RegistryResponse;
-import com.github.yyxff.nexusrpc.registry.ServiceRegistry;
+import com.github.yyxff.nexusrpc.registry.messagestruct.RegistryRequest;
+import com.github.yyxff.nexusrpc.registry.messagestruct.RegistryResponse;
 import com.sun.net.httpserver.HttpExchange;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -16,14 +14,14 @@ import java.util.List;
 import java.util.logging.Logger;
 
 
-public class RegistryHandlerJDK implements RegistryHandler {
+public class RegistryHandlerHTTP implements RegistryHandler {
 
     private final ServiceRegistry serviceRegistry;
     // Converter between json and object
     private final ObjectMapper objectMapper = new ObjectMapper();
-    private static final Logger logger = Logger.getLogger(RegistryHandlerJDK.class.getName());
+    private static final Logger logger = Logger.getLogger(RegistryHandlerHTTP.class.getName());
 
-    public RegistryHandlerJDK(ServiceRegistry serviceRegistry) {
+    public RegistryHandlerHTTP(ServiceRegistry serviceRegistry) {
         this.serviceRegistry = serviceRegistry;
     }
 

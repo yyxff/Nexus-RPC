@@ -1,9 +1,7 @@
 package com.github.yyxff.nexusrpc.client;
 
-import com.alibaba.nacos.shaded.org.checkerframework.checker.units.qual.A;
-import com.github.yyxff.nexusrpc.registry.RegistryResponse;
+import com.github.yyxff.nexusrpc.registry.RegistryClient;
 
-import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +11,11 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ServiceMap {
 
     private final Map<String, List<InetSocketAddress>> serviceMap = new ConcurrentHashMap<>();
-    private final LookUpHandler lookUpHandler = new LookUpHandler();
+    private final RegistryClient registry;
+
+    public ServiceMap(RegistryClient registry) {
+        this.registry = registry;
+    }
 
     public List<InetSocketAddress> get(String serviceName) {
         if (!serviceMap.containsKey(serviceName)) {
@@ -24,12 +26,13 @@ public class ServiceMap {
 
     private void lookUpFromRegistry(String serviceName) {
         try{
-            RegistryResponse registryResponse = lookUpHandler.lookUp(serviceName);
+            List<InetSocketAddress> serverList = registry.lookup(serviceName);
             if (!serviceMap.containsKey(serviceName)) {
                 serviceMap.put(serviceName, new ArrayList<>());
             }
             serviceMap.get(serviceName)
-                      .addAll(registryResponse.serverList);
+                      .addAll(serverList);
+
         }catch (Exception e) {
             e.printStackTrace();
         }

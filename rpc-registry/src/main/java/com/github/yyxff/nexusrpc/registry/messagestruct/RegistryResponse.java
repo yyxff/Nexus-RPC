@@ -1,4 +1,4 @@
-package com.github.yyxff.nexusrpc.registry;
+package com.github.yyxff.nexusrpc.registry.messagestruct;
 
 import java.net.InetSocketAddress;
 import java.util.List;

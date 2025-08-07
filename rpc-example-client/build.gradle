@@ -21,6 +21,7 @@ test {
 
 dependencies {
     implementation project(':rpc-core')
+    implementation project(':rpc-registry')
     implementation project(':rpc-client')
 }
 
