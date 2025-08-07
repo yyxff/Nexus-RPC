@@ -4,7 +4,11 @@ import com.alibaba.nacos.api.exception.NacosException;
 import com.github.yyxff.nexusrpc.client.RpcClient;
 import com.github.yyxff.nexusrpc.client.RpcClientProxy;
 import com.github.yyxff.nexusrpc.client.ServiceMap;
+import com.github.yyxff.nexusrpc.common.utils.ComponentFactory;
+import com.github.yyxff.nexusrpc.common.utils.ConfigLoader;
+import com.github.yyxff.nexusrpc.common.utils.RpcConfig;
 import com.github.yyxff.nexusrpc.core.loadbalancer.LoadBalancerRandom;
+import com.github.yyxff.nexusrpc.registry.RegistryClient;
 import com.github.yyxff.nexusrpc.registry.registryclient.NacosRegistryClient;
 import com.github.yyxff.nexusrpc.registry.registryclient.RegistryClientJDK;
 
@@ -18,11 +22,14 @@ public class ClientMain {
 
     public static void main(String[] args) throws IOException {
         try {
-            // RpcClient rpcClient = new RpcClient(new ServiceMap(new RegistryClientJDK()), new LoadBalancerRandom());
-            Properties properties = new Properties();
-            properties.setProperty("serverAddr", "127.0.0.1:8848"); // Nacos 服务端地址和端口
-            properties.setProperty("namespace", "public");
-            RpcClient rpcClient = new RpcClient(new ServiceMap(new NacosRegistryClient(properties)), new LoadBalancerRandom());
+            // Get config
+            RpcConfig config = ConfigLoader.load("../rpc-config.yaml");
+
+            // Connect to registry server
+            RegistryClient registry = ComponentFactory.getRegistry(config);
+
+            // Make rpc client
+            RpcClient rpcClient = new RpcClient(new ServiceMap(registry), new LoadBalancerRandom());
             RpcClientProxy proxy = new RpcClientProxy(rpcClient);
 
             // Get proxy instance of specific service
@@ -34,9 +41,11 @@ public class ClientMain {
 
             result = serviceHello.hello("nexus rpc client");
         logger.info("Get response from server: "+result);
-        }catch (NacosException e){
+        } catch (NacosException e) {
             e.printStackTrace();
             return;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

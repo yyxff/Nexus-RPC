@@ -1,0 +1,11 @@
+registry:
+  type: JDK # available: nacos, etcd, JDK
+  nacos:
+    address: 127.0.0.1:8848
+    namespace: public
+    username: nacos
+    password: nacos
+  etcd:
+    address: http://127.0.0.1:2379
+  JDK:
+    address: 127.0.0.1:8888

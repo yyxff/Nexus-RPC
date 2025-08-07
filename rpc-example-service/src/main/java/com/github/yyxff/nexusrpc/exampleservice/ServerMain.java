@@ -1,6 +1,9 @@
 package com.github.yyxff.nexusrpc.exampleservice;
 
 import com.alibaba.nacos.api.exception.NacosException;
+import com.github.yyxff.nexusrpc.common.utils.ComponentFactory;
+import com.github.yyxff.nexusrpc.common.utils.ConfigLoader;
+import com.github.yyxff.nexusrpc.common.utils.RpcConfig;
 import com.github.yyxff.nexusrpc.registry.RegistryClient;
 import com.github.yyxff.nexusrpc.registry.registryclient.NacosRegistryClient;
 import com.github.yyxff.nexusrpc.registry.registryclient.RegistryClientJDK;
@@ -17,31 +20,33 @@ public class ServerMain {
     private static final Logger logger = Logger.getLogger(ServerMain.class.getName());
 
     // Register service and Start rpc server
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
 
         // setupLogger();
-        // try {
-        ServiceMap serviceMap = new ServiceMap();
-        addServices(serviceMap);
-        logger.info("Added services to map");
+        try {
+            ServiceMap serviceMap = new ServiceMap();
+            addServices(serviceMap);
+            logger.info("Added services to map");
 
-        // RegistryClient registry = new RegistryClientJDK();
-        Properties properties = new Properties();
-        properties.setProperty("serverAddr", "127.0.0.1:8848"); // Nacos 服务端地址和端口
-        properties.setProperty("namespace", "public");
-        RegistryClient registry = new NacosRegistryClient(properties);
-        registerServices(registry, serviceMap.getInterfaces());
-        for (String serviceName : serviceMap.getInterfaces()) {
-            registry.register(serviceName, new InetSocketAddress("127.0.0.1", 8080));
+            // Connect to registry
+            RpcConfig config = ConfigLoader.load("../rpc-config.yaml");
+            RegistryClient registry = ComponentFactory.getRegistry(config);
+
+            // Register all services
+            for (String serviceName : serviceMap.getInterfaces()) {
+                registry.register(serviceName, new InetSocketAddress("127.0.0.1", 8080));
+            }
+            logger.info("Registered services to registry");
+
+            // Start rpc server
+            logger.info("Start Rpc server");
+            RpcServer rpcServer = new RpcServer(serviceMap, 8080);
+            rpcServer.start();
+        } catch (NacosException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        logger.info("Registered services to registry");
-
-        logger.info("Start Rpc server");
-        RpcServer rpcServer = new RpcServer(serviceMap, 8080);
-        rpcServer.start();
-        // }catch (NacosException e){
-        //     e.printStackTrace();
-        // }
     }
 
     /**
