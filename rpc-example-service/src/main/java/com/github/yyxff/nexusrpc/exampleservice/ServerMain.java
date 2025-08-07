@@ -1,12 +1,15 @@
 package com.github.yyxff.nexusrpc.exampleservice;
 
+import com.alibaba.nacos.api.exception.NacosException;
 import com.github.yyxff.nexusrpc.registry.RegistryClient;
+import com.github.yyxff.nexusrpc.registry.registryclient.NacosRegistryClient;
 import com.github.yyxff.nexusrpc.registry.registryclient.RegistryClientJDK;
 import com.github.yyxff.nexusrpc.server.RpcServer;
 import com.github.yyxff.nexusrpc.server.ServiceMap;
 
 import java.net.InetSocketAddress;
 import java.util.Collection;
+import java.util.Properties;
 import java.util.logging.*;
 
 public class ServerMain {
@@ -16,15 +19,19 @@ public class ServerMain {
     // Register service and Start rpc server
     public static void main(String[] args) throws Exception {
 
-//        setupLogger();
-
+        // setupLogger();
+        // try {
         ServiceMap serviceMap = new ServiceMap();
         addServices(serviceMap);
         logger.info("Added services to map");
 
-        RegistryClient registry = new RegistryClientJDK();
+        // RegistryClient registry = new RegistryClientJDK();
+        Properties properties = new Properties();
+        properties.setProperty("serverAddr", "127.0.0.1:8848"); // Nacos 服务端地址和端口
+        properties.setProperty("namespace", "public");
+        RegistryClient registry = new NacosRegistryClient(properties);
         registerServices(registry, serviceMap.getInterfaces());
-        for (String serviceName : serviceMap.getInterfaces()){
+        for (String serviceName : serviceMap.getInterfaces()) {
             registry.register(serviceName, new InetSocketAddress("127.0.0.1", 8080));
         }
         logger.info("Registered services to registry");
@@ -32,6 +39,9 @@ public class ServerMain {
         logger.info("Start Rpc server");
         RpcServer rpcServer = new RpcServer(serviceMap, 8080);
         rpcServer.start();
+        // }catch (NacosException e){
+        //     e.printStackTrace();
+        // }
     }
 
     /**
