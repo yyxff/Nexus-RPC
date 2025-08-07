@@ -1,8 +1,11 @@
 package com.github.yyxff.nexusrpc.exampleservice;
 
+import com.github.yyxff.nexusrpc.registry.RegistryClient;
+import com.github.yyxff.nexusrpc.registry.registryclient.RegistryClientJDK;
 import com.github.yyxff.nexusrpc.server.RpcServer;
 import com.github.yyxff.nexusrpc.server.ServiceMap;
-import com.github.yyxff.nexusrpc.server.handler.RegisterHandler;
+
+import java.net.InetSocketAddress;
 import java.util.Collection;
 import java.util.logging.*;
 
@@ -19,12 +22,15 @@ public class ServerMain {
         addServices(serviceMap);
         logger.info("Added services to map");
 
-        RegisterHandler registerHandler = new RegisterHandler();
-        registerServices(registerHandler, serviceMap.getInterfaces());
+        RegistryClient registry = new RegistryClientJDK();
+        registerServices(registry, serviceMap.getInterfaces());
+        for (String serviceName : serviceMap.getInterfaces()){
+            registry.register(serviceName, new InetSocketAddress("127.0.0.1", 8080));
+        }
         logger.info("Registered services to registry");
 
         logger.info("Start Rpc server");
-        RpcServer rpcServer = new RpcServer(serviceMap);
+        RpcServer rpcServer = new RpcServer(serviceMap, 8080);
         rpcServer.start();
     }
 
@@ -40,11 +46,11 @@ public class ServerMain {
     /**
      * Register all services to registry
      */
-    private static void registerServices(RegisterHandler registerHandler, Collection<String> interfaces) {
+    private static void registerServices(RegistryClient registry, Collection<String> interfaces) {
         for (String interfaceName : interfaces){
             try{
                 logger.info("Registering service " + interfaceName);
-                registerHandler.registry(interfaceName);
+                registry.register(interfaceName, new InetSocketAddress("127.0.0.1", 8080));
             }catch (Exception e){
                 e.printStackTrace();
             }

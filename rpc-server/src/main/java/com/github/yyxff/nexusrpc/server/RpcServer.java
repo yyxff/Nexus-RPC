@@ -13,12 +13,13 @@ import java.util.logging.*;
 
 public class RpcServer {
 
-    private final int port = 8080;
+    private final int port;
     private final ServiceMap serviceMap;
     private static final Logger logger = Logger.getLogger(RpcServer.class.getName());
 
 
-    public RpcServer(ServiceMap serviceMap) {
+    public RpcServer(ServiceMap serviceMap, int port) {
+        this.port = port;
         this.serviceMap = serviceMap;
     }
 
