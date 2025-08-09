@@ -3,8 +3,12 @@ package com.github.yyxff.nexusrpc.core.messagestruct;
 import java.io.Serializable;
 
 public class RpcResponse implements Serializable {
+    // ID to retrieve result future from dispatcher
     private String responseID;
+
+    // Returned result from real function
     private Object result;
+
     private Class<?> resultType;
 
     public RpcResponse(String responseID,

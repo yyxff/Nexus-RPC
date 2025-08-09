@@ -3,7 +3,9 @@ package com.github.yyxff.nexusrpc.core.messagestruct;
 import java.io.Serializable;
 
 public class RpcRequest implements Serializable {
+    // ID to retrieve result future from dispatcher
     private String requestID;
+
     // We need this string to locate a specific service
     private String interfaceName;
 
