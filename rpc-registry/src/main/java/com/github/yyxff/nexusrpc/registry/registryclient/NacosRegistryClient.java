@@ -22,6 +22,7 @@ public class NacosRegistryClient implements RegistryClient {
     @Override
     public void register(String serviceName, InetSocketAddress address) {
         try{
+            // Use API provided by nacos server
             namingService.registerInstance(serviceName, address.getHostName(), address.getPort());
         }catch (NacosException e) {
             throw new RuntimeException("Failed to register service in Nacos", e);
@@ -31,6 +32,7 @@ public class NacosRegistryClient implements RegistryClient {
     @Override
     public List<InetSocketAddress> lookup(String serviceName) {
         try {
+            // Use API provided by nacos server
             List<Instance> instances = namingService.getAllInstances(serviceName);
             return instances.stream()
                     .map(i -> new InetSocketAddress(i.getIp(), i.getPort()))
