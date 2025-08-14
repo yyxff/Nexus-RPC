@@ -5,6 +5,11 @@ import io.netty.channel.Channel;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
+/**
+ * For channels in the pool, we need a way to record the status of channel
+ * For example the |using| state of this channel,
+ * so different requests will not write on the same channel at same time
+ */
 public class PooledChannel {
 
     private final Channel channel;
